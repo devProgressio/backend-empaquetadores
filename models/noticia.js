@@ -6,6 +6,10 @@ const NoticiaSchema = Schema({
         type: String,
         required: true
     },
+    glosa: {
+        type: String,
+        required: true
+    },
     fechaHoraCreacion: {
         // Esta fecha hora deberia ser automatica al grabar la fecha.
         type: Date,

@@ -22,6 +22,15 @@ const UsuarioSchema = Schema({
         type: String,
         required: true,
         default: 'USER_ROLE'
+
+        // ROLES DE USUARIOS:
+
+        // ADMIN_ROLE: Tiene acceso a todas las opciones del menu
+        // USER_ROLE: Tiene accesos a solo ver sus datos, turnos tomados, faltas asignadas.
+        // FALTA_ROLE: Tiene acceso a datos, ver sus turnos, puede asignar falta a un usuario, mantenedor de faltas.
+        // TURNO_ROLE: Puede crear planillas, creacion de turnos,
+
+
     },
     google: {
         type: Boolean,

@@ -31,7 +31,8 @@ const FaltaSchema = Schema({
         required: true,
         maxLength: 100,
         lowercase: true,
-        trim: true
+        trim: true,
+        unique: true
     },
     glosa: {
         type: String,

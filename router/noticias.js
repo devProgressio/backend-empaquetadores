@@ -23,6 +23,7 @@ router.get('/', validarJWT, getNoticias);
 router.post('/', [
         validarJWT,
         check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+        check('glosa', 'La descripción es obligatoria').not().isEmpty(),
         check('activaHasta', 'La fecha y hora activa son obligatorias').not().isEmpty(),
         check('usuario', 'Falta el identificador del usuario.').isMongoId(),
         validarCampos
