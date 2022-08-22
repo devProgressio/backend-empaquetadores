@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose');
 
-const PlanillaTurnoSchema = Schema({
+const CalendarioSchema = Schema({
 
-    planilla: {
+    planillaId: {
         type: Schema.Types.ObjectId,
         ref: 'Planilla',
         required: true
@@ -19,12 +19,12 @@ const PlanillaTurnoSchema = Schema({
         type: Number,
         required: true
     }
-}, { collection: 'planilla_turno' });
+}, { collection: 'calendario' });
 
-PlanillaTurnoSchema.method('toJSON', function() {
+CalendarioSchema.method('toJSON', function() {
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;
     return object;
 })
 
-module.exports = model('PlanillaTurno', PlanillaTurnoSchema);
+module.exports = model('Calendario', CalendarioSchema);

@@ -6,7 +6,6 @@ const getPlanillas = async(req, res = response) => {
     const planillas = await Planilla.find();
 
     try {
-
         res.json({
             ok: true,
             planillas

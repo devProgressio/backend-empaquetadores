@@ -28,7 +28,7 @@ const FaltaSchema = Schema({
     },
     // fecha que asigna la falta
     fecha: {
-        type: String,
+        type: Date,
         required: true,
         default: Date.now
     }

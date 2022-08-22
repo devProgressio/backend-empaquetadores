@@ -24,7 +24,8 @@ router.post('/', [
         validarJWT,
         check('nombre', 'El nombre de la planilla es necesario.').not().isEmpty(),
         check('glosa', 'La descripción de la planilla es necesaria.').not().isEmpty(),
-        check('fecha', 'La fecha de la planilla es necesaria.').not().isEmpty(),
+        check('fechaHoraInicio', 'La fecha Inicio de la planilla es necesaria.').not().isEmpty(),
+        check('fechaHoraTermino', 'La fecha Término de la planilla es necesaria.').not().isEmpty(),
         validarCampos
     ],
     crearPlanilla
@@ -34,7 +35,8 @@ router.put('/:id', [
         validarJWT,
         check('nombre', 'El nombre de la planilla es necesario.').not().isEmpty(),
         check('glosa', 'La descripción de la planilla es necesaria.').not().isEmpty(),
-        check('fecha', 'La fecha de la planilla es necesaria.').not().isEmpty(),
+        check('fechaHoraInicio', 'La fecha Inicio de la planilla es necesaria.').not().isEmpty(),
+        check('fechaHoraTermino', 'La fecha Término de la planilla es necesaria.').not().isEmpty(),
         validarCampos
     ],
     actualizarPlanilla);

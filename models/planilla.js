@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
 
 const PlanillaSchema = Schema({
-
     nombre: {
         type: String,
         required: true
@@ -18,8 +17,17 @@ const PlanillaSchema = Schema({
     // fecha que va a iniciar la planilla. 
     fecha: {
         type: Date,
+        required: true,
+        default: Date.now
+    },
+    fechaHoraInicio: {
+        type: Date,
         required: true
     },
+    fechaHoraTermino: {
+        type: Date,
+        required: true
+    }
 }, { collection: 'planilla' });
 
 PlanillaSchema.method('toJSON', function() {
