@@ -30,6 +30,7 @@ app.use('/api/noticias', require('./router/noticias'));
 app.use('/api/planillas', require('./router/planillas'));
 app.use('/api/faltas', require('./router/faltas'));
 app.use('/api/calendario', require('./router/calendario'));
+app.use('/api/usuario-calendario', require('./router/usuario-calendario'));
 app.use('/api/login', require('./router/auth'));
 app.use('/api/todo', require('./router/busquedas'));
 app.use('/api/upload', require('./router/uploads'));
