@@ -19,8 +19,8 @@ const getMenuFrontEnd = (role = 'USER_ROLE') => {
             titulo: 'Administración',
             icono: 'mdi mdi-clipboard-alert',
             submenu: [
-                { titulo: 'Faltas asignadas', url: 'visor-faltas' },
-                { titulo: 'Turnos asignados', url: 'visor-turnos' },
+                { titulo: 'Faltas asignadas', url: 'falta-asignada' },
+                { titulo: 'Turnos asignados', url: 'turno-asignado' },
                 { titulo: 'Toma de turnos', url: 'toma-turnos' }
             ],
         },

@@ -17,7 +17,6 @@ const listar = async(req, res = response) => {
             msg: 'Error al listar turnos por usuario. Hable con el administrador.'
         });
     }
-
 }
 
 const crear = async(req, res = response) => {

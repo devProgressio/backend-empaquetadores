@@ -1,40 +1,23 @@
 const { response } = require("express");
-const Falta = require('../models/falta');
+const UsuarioFalta = require('../models/usuario-falta');
 
 const listar = async(req, res = response) => {
+    const id = req.params.usuarioId;
+    const usuarioFalta = await UsuarioFalta.find({ usuario: id })
+        .populate('usuario', 'nombre')
+        .populate('falta', 'nombre gravedad')
+        .populate('supervisor', 'nombre');
     try {
-        const faltas = await Falta.find();
         res.json({
             ok: true,
-            faltas
+            usuarioFalta
         });
-
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Ocurrio un problema al listar faltas. Hable con el administrador.'
-        })
-    }
-
-}
-
-const listarPorUsuario = async(req, res = response) => {
-
-    try {
-        const faltas = await Falta.find();
-
-        res.json({
-            ok: true,
-            faltas
+            msg: 'Error al listar turnos por usuario. Hable con el administrador.'
         });
-
-    } catch (error) {
-        res.status(500).json({
-            ok: false,
-            msg: 'Ocurrio un problema al listar faltas. Hable con el administrador.'
-        })
     }
-
 }
 
 const crear = async(req, res = response) => {
@@ -78,7 +61,7 @@ const actualizar = async(req, res = response) => {
         if (!falta) {
             return res.status(404).json({
                 ok: true,
-                msg: 'Falta no encontrada por id.'
+                msg: 'Falta no encontrada por ID.'
             });
         }
 
@@ -138,8 +121,7 @@ const eliminar = async(req, res = response) => {
 
 module.exports = {
     listar,
-    listarPorUsuario,
     crear,
     actualizar,
     eliminar
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

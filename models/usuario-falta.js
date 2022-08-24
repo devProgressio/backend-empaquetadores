@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const FaltaSchema = Schema({
+const UsuarioFaltaSchema = Schema({
 
     // falta asignada al usuario.
     falta: {
@@ -21,23 +21,23 @@ const FaltaSchema = Schema({
         required: true
     },
     // en que turno ocurrió la falta.
-    turno: {
+/*     turno: {
         type: Schema.Types.ObjectId,
         ref: 'Turno',
         required: true
-    },
+    }, */
     // fecha que asigna la falta
     fecha: {
         type: Date,
         required: true,
         default: Date.now
     }
-}, { collection: 'falta' });
+}, { collection: 'usuario-falta' });
 
-FaltaSchema.method('toJSON', function() {
+UsuarioFaltaSchema.method('toJSON', function() {
     const { __v, _id, password, ...object } = this.toObject();
     object.id = _id;
     return object;
 })
 
-module.exports = model('Falta', FaltaSchema);
+module.exports = model('UsuarioFalta', UsuarioFaltaSchema);
