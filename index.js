@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 
 const { dbConnection } = require('./database/config');
+const { ROLES } = require('./emun/roles');
 
 // Crear el servidor de express
 const app = express();
@@ -18,9 +19,6 @@ app.use(express.json());
 //BASE DE DATOS
 dbConnection();
 
-//user: mean_user
-//pass: fJgBJvXlXTK4L6F1
-
 // Directorio público
 app.use(express.static('public'));
 
@@ -30,6 +28,7 @@ app.use('/api/noticias', require('./router/noticias'));
 app.use('/api/planillas', require('./router/planillas'));
 app.use('/api/faltas', require('./router/faltas'));
 app.use('/api/calendario', require('./router/calendario'));
+app.use('/api/toma-turno', require('./router/toma-turno'));
 app.use('/api/usuario-calendario', require('./router/usuario-calendario'));
 app.use('/api/usuario-falta', require('./router/usuario-falta'));
 app.use('/api/login', require('./router/auth'));
@@ -44,3 +43,4 @@ app.get('*', (req, res) => {
 app.listen(process.env.PORT, () => {
     console.log('Servidor corriendo en puerto ' + process.env.PORT);
 });
+console.log('admin', ROLES.ADMINISTRADOR);

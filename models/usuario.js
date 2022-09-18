@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const { ROLES } = require('../emun/roles');
 
 const UsuarioSchema = Schema({
 
@@ -13,28 +14,38 @@ const UsuarioSchema = Schema({
     },
     password: {
         type: String,
-        required: true
+        required: false
     },
     img: {
-        type: String
+        type: String,
+        required: false
     },
     role: {
         type: String,
         required: true,
-        default: 'USER_ROLE'
-
+        default: ROLES.USUARIO
+    
         // ROLES DE USUARIOS:
 
-        // ADMIN_ROLE: Tiene acceso a todas las opciones del menu
-        // USER_ROLE: Tiene accesos a solo ver sus datos, turnos tomados, faltas asignadas.
-        // FALTA_ROLE: Tiene acceso a datos, ver sus turnos, puede asignar falta a un usuario, mantenedor de faltas.
-        // TURNO_ROLE: Puede crear planillas, creacion de turnos,
+        // ADMINISTRADOR: Tiene acceso a todas las opciones del menu
+        // USUARIO: Tiene accesos a solo ver sus datos, turnos tomados, faltas asignadas.
+        // FALTA: Tiene acceso a datos, ver sus turnos, puede asignar falta a un usuario, mantenedor de faltas.
+        // TURNO: Puede crear planillas, creacion de turnos,
 
 
     },
     google: {
         type: Boolean,
         default: false
+    },
+    estado: {
+        type: String,
+        required: true,
+        default: 'HABILITADO'
+
+        //  ELIMINADO: Usuario eliminado.
+        //  HABILITADO: Usuario hablitado para trabajar puede tomar turnos.
+        //  INHABILITADO: Usuario no se permite que tome turnos para trabajar.
     }
 }, { collection: 'usuarios' });
 

@@ -1,5 +1,6 @@
 const { response } = require("express");
 const Calendario = require('../models/calendario');
+const Planilla = require('../models/planilla');
 
 const listarPorPlanilla = async(req, res = response) => {
     const planillaId = req.params.planillaId;
@@ -15,7 +16,26 @@ const listarPorPlanilla = async(req, res = response) => {
             msg: 'Error al listar planillas turnos. Hable con el administrador.'
         });
     }
+}
 
+const listarActivo = async(req, res = response) => {
+    // buscar la planilla activa.
+    // luego con ese ID buscar los calendarios
+    console.log("LLEGOOOOOOOOOOOOOOOO");
+/*     const planilla = await Planilla.find({ estado: true });
+    console.log(planilla); */
+    /* const calendario = await Calendario.find({ planillaId: planilla.id });
+    console.log(calendario); */
+    try {
+        res.json({
+            ok: true
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al listar planillas turnos. Hable con el administrador.'
+        });
+    }
 }
 
 const crear = async(req, res = response) => {
@@ -70,6 +90,7 @@ const eliminar= async(req, res = response) => {
 
 module.exports = {
     listarPorPlanilla,
+    listarActivo,
     crear,
     actualizar,
     eliminar

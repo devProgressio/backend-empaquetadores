@@ -4,8 +4,24 @@ const { generarJWT } = require('../helpers/jwt');
 
 const Usuario = require('../models/usuario');
 
+const listar = async(req, res = response) => {
+    try {
+        const usuarios = await Usuario.find();
+        res.json({
+            ok: true,
+            usuarios
+        });
 
-const getUsuarios = async(req, res = response) => {
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Ocurrió un problema al listar usuarios. Hable con el administrador.'
+        })
+    }
+}
+
+
+/* const getUsuarios = async(req, res = response) => {
 
     const desde = Number(req.query.desde) || 0;
 
@@ -25,42 +41,41 @@ const getUsuarios = async(req, res = response) => {
         total
     })
 
-}
+} */
 
 const crearUsuario = async(req, res = response) => {
-
     try {
         const { email, password } = req.body;
         const existeEmail = await Usuario.findOne({ email });
-
         if (existeEmail) {
             return res.status(400).json({
                 ok: false,
                 msg: "El correo '" + email + "' ya está registrado"
-            })
+            });
         }
 
         const usuario = new Usuario(req.body);
-
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
-        usuario.password = bcrypt.hashSync(password, salt);
+
+        // password por defecto.
+        usuario.password = bcrypt.hashSync(process.env.DEFAULT_PASSWORD, salt);
 
         await usuario.save();
         // Generar un TOKEN
-        const token = await generarJWT(usuario.id);
+        //const token = await generarJWT(usuario.id);
 
         res.json({
             ok: true,
             usuario,
-            token
-        })
+            //token
+        });
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado, revisar logs'
+            msg: 'Ocurrió un error al crear usuario.'
         })
     }
 }
@@ -69,7 +84,7 @@ const actualizarUsuarios = async(req, res = response) => {
 
     //TODO: Validar token y comprobar si es el usuario correcto
     try {
-        const uid = req.params.id;
+        const { uid } = req.body;
         const usuarioDB = await Usuario.findById(uid);
 
         if (!usuarioDB) {
@@ -83,10 +98,10 @@ const actualizarUsuarios = async(req, res = response) => {
         //Quita o extrae el password, google, email si es que viniera ya que no se actualizaran.
         const { password, google, email, ...campos } = req.body;
 
-
         if (usuarioDB.email !== email) {
             const existeEmail = await Usuario.findOne({ email });
-            if (existeEmail) {
+            
+            if (existeEmail && existeEmail.uid == uid) {
                 return res.status(400).json({
                     ok: false,
                     msg: 'Ya existe un usuario con ese email'
@@ -94,15 +109,7 @@ const actualizarUsuarios = async(req, res = response) => {
             }
         }
 
-        if (!usuarioDB.google) {
-            campos.email = email;
-        } else if (usuarioDB.email !== email) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'Usuarios de google no pueden cambiar su correo'
-            })
-        }
-
+        console.log(campos);
         const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
 
         res.json({
@@ -122,6 +129,7 @@ const actualizarUsuarios = async(req, res = response) => {
 const eliminarUsuario = async(req, res = response) => {
     try {
         const uid = req.params.id;
+        console.log('eliminarUsuario', uid);
         const usuarioDB = await Usuario.findById(uid);
         if (!usuarioDB) {
             return res.status(404).json({
@@ -147,7 +155,7 @@ const eliminarUsuario = async(req, res = response) => {
 }
 
 module.exports = {
-    getUsuarios,
+    listar,
     crearUsuario,
     actualizarUsuarios,
     eliminarUsuario

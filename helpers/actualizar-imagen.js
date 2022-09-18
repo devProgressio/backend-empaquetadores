@@ -1,5 +1,4 @@
 const fs = require('fs');
-
 const Noticia = require('../models/noticia');
 const Usuario = require('../models/usuario');
 
@@ -10,7 +9,7 @@ const borrarImagen = (path) => {
     }
 }
 
-const actualizarImagen = async(tipo, id, nombreArchivo) => {
+const actualizarImagen = async (tipo, id, nombreArchivo) => {
     let pathViejo = '';
     switch (tipo) {
         case 'noticias':
@@ -20,7 +19,7 @@ const actualizarImagen = async(tipo, id, nombreArchivo) => {
                 return false;
             }
 
-            pathViejo = `./upload/noticias/${ noticia.img}`;
+            pathViejo = `./upload/noticias/${noticia.img}`;
             borrarImagen(pathViejo);
 
             noticia.img = nombreArchivo;
@@ -30,11 +29,11 @@ const actualizarImagen = async(tipo, id, nombreArchivo) => {
         case 'usuarios':
             const usuario = await Usuario.findById(id);
             if (!usuario) {
-                console.log('No es una usuario por id');
+                console.log('No es un usuario por id');
                 return false;
             }
 
-            pathViejo = `./upload/usuarios/${ usuario.img}`;
+            pathViejo = `./upload/usuarios/${usuario.img}`;
             borrarImagen(pathViejo);
 
             usuario.img = nombreArchivo;

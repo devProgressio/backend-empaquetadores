@@ -1,4 +1,6 @@
-const getMenuFrontEnd = (role = 'USER_ROLE') => {
+const { ROLES } = require("../emun/roles");
+
+const getMenuFrontEnd = (role = ROLES.USUARIO) => {
 
     const menu = [{
             titulo: 'Dashboard',
@@ -21,7 +23,7 @@ const getMenuFrontEnd = (role = 'USER_ROLE') => {
             submenu: [
                 { titulo: 'Faltas asignadas', url: 'falta-asignada' },
                 { titulo: 'Turnos asignados', url: 'turno-asignado' },
-                { titulo: 'Toma de turnos', url: 'toma-turnos' }
+                { titulo: 'Toma de turnos', url: 'toma-turno' }
             ],
         },
         {
@@ -35,14 +37,14 @@ const getMenuFrontEnd = (role = 'USER_ROLE') => {
     ];
 
 
-    if (role === 'ADMIN_ROLE') {
+    if (role === ROLES.ADMINISTRADOR) {
         menu[1].submenu.unshift({ titulo: 'Usuarios', url: 'usuarios' });
         menu[1].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
         menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
         menu[1].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
     }
 
-    if (role === 'FALTA_ROLE') {
+    if (role === ROLES.FALTA) {
         menu[1].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
         menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
         menu[1].submenu.unshift({ titulo: 'Asignaciones de falta', url: 'asignar-falta' });
@@ -50,7 +52,7 @@ const getMenuFrontEnd = (role = 'USER_ROLE') => {
         menu[1].submenu.unshift({ titulo: 'Usuarios', url: 'usuarios' });
     }
 
-    if (role === 'TURNO_ROLE') {
+    if (role === ROLES.TURNO) {
         menu[1].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
         menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
     }
