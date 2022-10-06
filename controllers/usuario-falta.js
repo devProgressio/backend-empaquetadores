@@ -1,7 +1,7 @@
 const { response } = require("express");
 const UsuarioFalta = require('../models/usuario-falta');
 
-const listar = async(req, res = response) => {
+const listar = async (req, res = response) => {
     const id = req.params.usuarioId;
     const usuarioFalta = await UsuarioFalta.find({ usuario: id })
         .populate('usuario', 'nombre')
@@ -20,26 +20,16 @@ const listar = async(req, res = response) => {
     }
 }
 
-const crear = async(req, res = response) => {
-
+const crear = async (req, res = response) => {
     try {
-
         console.log(req.body);
-        const falta = new Falta(req.body);
-        const existe = await Falta.findOne({ nombre: falta.nombre });
-
-        if (!existe) {
-            const faltaDB = await falta.save();
-            res.json({
-                ok: true,
-                msg: faltaDB
-            });
-        } else {
-            return res.status(400).json({
-                ok: false,
-                msg: `Ya existe una falta con el nombre ${existe.nombre}`
-            });
-        }
+        const usuarioFalta = new UsuarioFalta(req.body);
+        console.log('new falta', usuarioFalta);
+        const usuarioFaltaDB = await usuarioFalta.save();
+        res.json({
+            ok: true,
+            usuarioFalta
+        });
 
 
     } catch (error) {
@@ -51,7 +41,7 @@ const crear = async(req, res = response) => {
 
 }
 
-const actualizar = async(req, res = response) => {
+const actualizar = async (req, res = response) => {
 
     try {
         const id = req.params.id;
@@ -86,7 +76,7 @@ const actualizar = async(req, res = response) => {
 
 }
 
-const eliminar = async(req, res = response) => {
+const eliminar = async (req, res = response) => {
 
     const id = req.params.id;
 

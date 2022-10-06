@@ -46,7 +46,11 @@ const UsuarioSchema = Schema({
         //  ELIMINADO: Usuario eliminado.
         //  HABILITADO: Usuario hablitado para trabajar puede tomar turnos.
         //  INHABILITADO: Usuario no se permite que tome turnos para trabajar.
-    }
+    },
+    cambiaPassword: {
+        type: Boolean,
+        default: false
+    },
 }, { collection: 'usuarios' });
 
 UsuarioSchema.method('toJSON', function() {

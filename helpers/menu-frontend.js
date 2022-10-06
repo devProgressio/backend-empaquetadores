@@ -27,6 +27,11 @@ const getMenuFrontEnd = (role = ROLES.USUARIO) => {
             ],
         },
         {
+            titulo: 'Asignaciones',
+            icono: 'mdi mdi-clipboard-alert',
+            submenu: [],
+        },
+        {
             titulo: 'Información',
             icono: 'mdi mdi-information-outline',
             submenu: [
@@ -42,19 +47,20 @@ const getMenuFrontEnd = (role = ROLES.USUARIO) => {
         menu[1].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
         menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
         menu[1].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
+        menu[3].submenu.unshift({ titulo: 'Faltas', url: 'asignar-falta' });
+        menu[3].submenu.unshift({ titulo: 'Turnos', url: 'asignar-turno' });
     }
 
     if (role === ROLES.FALTA) {
         menu[1].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
         menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
-        menu[1].submenu.unshift({ titulo: 'Asignaciones de falta', url: 'asignar-falta' });
-        //quitar luego de hacer pruebas en role falta. 
-        menu[1].submenu.unshift({ titulo: 'Usuarios', url: 'usuarios' });
+        menu[3].submenu.unshift({ titulo: 'Asignaciones de faltas', url: 'asignar-falta' });
     }
 
     if (role === ROLES.TURNO) {
         menu[1].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
         menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
+        menu[3].submenu.unshift({ titulo: 'Asignaciones de turnos', url: 'asignar-turno' });
     }
 
     return menu;

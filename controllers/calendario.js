@@ -1,6 +1,5 @@
 const { response } = require("express");
 const Calendario = require('../models/calendario');
-const Planilla = require('../models/planilla');
 
 const listarPorPlanilla = async(req, res = response) => {
     const planillaId = req.params.planillaId;

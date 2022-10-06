@@ -27,10 +27,14 @@ const UsuarioFaltaSchema = Schema({
         required: true
     }, */
     // fecha que asigna la falta
-    fecha: {
+    fechaCreacion: {
         type: Date,
-        required: true,
+        required: false,
         default: Date.now
+    },
+    fechaFalta: {
+        type: Date,
+        required: true
     }
 }, { collection: 'usuario-falta' });
 

@@ -17,4 +17,6 @@ const router = Router();
 
 router.get('/', validarJWT, listar);
 
+router.get('/', validarJWT, listar);
+
 module.exports = router;

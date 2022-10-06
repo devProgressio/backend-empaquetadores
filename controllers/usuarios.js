@@ -1,8 +1,9 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
-
 const Usuario = require('../models/usuario');
+const mailer = require('../templates/registro-template');
+const { randomPassword } = require('../middlewares/random-password');
 
 const listar = async(req, res = response) => {
     try {
@@ -59,15 +60,19 @@ const crearUsuario = async(req, res = response) => {
         const salt = bcrypt.genSaltSync();
 
         // password por defecto.
-        usuario.password = bcrypt.hashSync(process.env.DEFAULT_PASSWORD, salt);
+        const randomPass = randomPassword(5,3,2);
+        usuario.password = bcrypt.hashSync(randomPass, salt);
 
-        await usuario.save();
+        const usuarioDB = await usuario.save();
         // Generar un TOKEN
         //const token = await generarJWT(usuario.id);
 
+        // ENVIAR CORREO CON LA CONTRASEÑA
+        mailer.enviarMail(usuarioDB, randomPass);
+
         res.json({
             ok: true,
-            usuario,
+            usuarioDB,
             //token
         });
 
@@ -154,9 +159,45 @@ const eliminarUsuario = async(req, res = response) => {
     }
 }
 
+const actualizarPassword = async(req, res = response) => {
+    try {
+        console.log('llego');
+        const uid = req.params.id;
+        const usuario = await Usuario.findById(uid);
+
+        if (!usuario) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un usuario por ese id'
+            });
+        }
+
+        const { password } = req.body;
+        const salt = bcrypt.genSaltSync();
+        const update = {
+            password: bcrypt.hashSync(password, salt),
+            cambiaPassword: true
+        }
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, update, { new: true });
+        console.log(usuarioActualizado);
+        res.json({
+            ok: true,
+            usuario: usuarioActualizado
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado al actualizar usuario'
+        })
+    }
+};
+
 module.exports = {
     listar,
     crearUsuario,
     actualizarUsuarios,
-    eliminarUsuario
+    eliminarUsuario,
+    actualizarPassword
 }
