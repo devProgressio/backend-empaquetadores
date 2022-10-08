@@ -2,12 +2,12 @@ const { Schema, model } = require('mongoose');
 
 const UsuarioCalendarioSchema = Schema({
 
-    usuarioId: {
+    usuario: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
     },
-    calendarioId: {
+    calendario: {
         type: Schema.Types.ObjectId,
         ref: 'Calendario',
         required: true

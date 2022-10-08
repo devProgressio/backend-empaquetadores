@@ -1,11 +1,12 @@
 const { response } = require("express");
 const UsuarioCalendario = require('../models/usuario-calendario');
+const Calendario = require('../models/calendario');
 
 const listar = async(req, res = response) => {
     const id = req.params.usuarioId;
-    const usuarioCalendario = await UsuarioCalendario.find({ usuarioId: id })
-        .populate('usuarioId', 'nombre')
-        .populate('calendarioId', 'fechaHoraInicio fechaHoraTermino');
+    const usuarioCalendario = await UsuarioCalendario.find({ usuario: id })
+        .populate('usuario', 'nombre')
+        .populate('calendario', 'fechaHoraInicio fechaHoraTermino');
     try {
         res.json({
             ok: true,
@@ -23,9 +24,23 @@ const crear = async(req, res = response) => {
     const usuarioCalendario = new UsuarioCalendario(req.body);
     try {
         const usuarioCalendarioDB = await usuarioCalendario.save();
+
+        // Validar que no este tomando el mismo turno dos veces.
+
+
+
+
+        // Resta a la cantidad 1.
+        const calendario = await Calendario.findById(usuarioCalendarioDB.calendario);
+        console.log(calendario);
+        const update = {
+            cantidad: (calendario.cantidad - 1)
+        }
+        const usuarioCalendarioActualizado = await Calendario.findByIdAndUpdate(calendario.id, update, { new: true });
+        console.log(usuarioCalendarioActualizado);
         res.json({
             ok: true,
-            turnos: usuarioCalendarioDB
+            usuarioCalendario: usuarioCalendarioActualizado
         });
     } catch (error) {
         res.status(500).json({

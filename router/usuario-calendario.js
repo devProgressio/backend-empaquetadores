@@ -22,16 +22,16 @@ router.get('/:usuarioId', validarJWT, listar);
 
 router.post('/', [
         validarJWT,
-        check('usuarioId', 'Falta el identificador del usuario.').isMongoId(),
-        check('calendarioId', 'Falta el identificador de la calendario.').isMongoId(),
+        check('usuario', 'Falta el identificador del usuario.').isMongoId(),
+        check('calendario', 'Falta el identificador de la calendario.').isMongoId(),
         validarCampos
     ],
     crear);
 
 router.put('/:id', [
         validarJWT,
-        check('usuarioId', 'Falta el identificador del usuario.').isMongoId(),
-        check('calendarioId', 'Falta el identificador de la calendario.').isMongoId(),
+        check('usuario', 'Falta el identificador del usuario.').isMongoId(),
+        check('calendario', 'Falta el identificador de la calendario.').isMongoId(),
         validarCampos
     ],
     actualizar);

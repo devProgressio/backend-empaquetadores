@@ -16,18 +16,14 @@ const listarPorPlanilla = async(req, res = response) => {
         });
     }
 }
-
-const listarActivo = async(req, res = response) => {
-    // buscar la planilla activa.
-    // luego con ese ID buscar los calendarios
-    console.log("LLEGOOOOOOOOOOOOOOOO");
-/*     const planilla = await Planilla.find({ estado: true });
-    console.log(planilla); */
-    /* const calendario = await Calendario.find({ planillaId: planilla.id });
-    console.log(calendario); */
+// Arreglar este servicio para que no permita cantidad <= 0 
+const listarTurnosValidos = async(req, res = response) => {
+    const planillaId = req.params.planillaId;
+    const calendario = await Calendario.find({ planillaId: planillaId, cantidad: { $gt: 0 } });
     try {
         res.json({
-            ok: true
+            ok: true,
+            calendario
         });
     } catch (error) {
         res.status(500).json({
@@ -89,7 +85,7 @@ const eliminar= async(req, res = response) => {
 
 module.exports = {
     listarPorPlanilla,
-    listarActivo,
+    listarTurnosValidos,
     crear,
     actualizar,
     eliminar
