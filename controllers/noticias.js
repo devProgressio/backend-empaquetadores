@@ -57,7 +57,7 @@ const actualizarNoticia = async(req, res = response) => {
         console.log(id, uid);
         if (!noticia) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Noticia no encontrada por id'
             });
         }
@@ -67,7 +67,7 @@ const actualizarNoticia = async(req, res = response) => {
             usuario: uid
         }
 
-        const noticiaActualizada = await Noticia.findByIdAndUpdate(id, cambiosNoticia, { new: true })
+        const noticiaActualizada = await Noticia.findByIdAndUpdate(id, cambiosNoticia, { new: true });
 
         res.json({
             ok: true,

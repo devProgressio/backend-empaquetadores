@@ -6,7 +6,8 @@ const listar = async (req, res = response) => {
     const usuarioFalta = await UsuarioFalta.find({ usuario: id })
         .populate('usuario', 'nombre')
         .populate('falta', 'nombre gravedad')
-        .populate('supervisor', 'nombre');
+        .populate('supervisor', 'nombre')
+        .sort('fechaCreacion');
     try {
         res.json({
             ok: true,

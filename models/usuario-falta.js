@@ -39,7 +39,7 @@ const UsuarioFaltaSchema = Schema({
 }, { collection: 'usuario-falta' });
 
 UsuarioFaltaSchema.method('toJSON', function() {
-    const { __v, _id, password, ...object } = this.toObject();
+    const { __v, _id, ...object } = this.toObject();
     object.id = _id;
     return object;
 })

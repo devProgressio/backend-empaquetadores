@@ -4,9 +4,23 @@ const Calendario = require('../models/calendario');
 
 const listar = async(req, res = response) => {
     const id = req.params.usuarioId;
+    //, calendario:  {$gt: new Date()}
+
+    const fechaHoraServidor = new Date();
     const usuarioCalendario = await UsuarioCalendario.find({ usuario: id })
-        .populate('usuario', 'nombre')
-        .populate('calendario', 'fechaHoraInicio fechaHoraTermino');
+    .populate('usuario', 'nombre')
+        .populate({
+            path: 'calendario',
+            populate: {
+                path: 'calendario',
+                select: 'fechaHoraInicio fechaHoraTermino'
+              },
+            options: { sort: { 'fechaHoraInicio': -1 } }
+          });
+    
+
+    // los que aún no pasan de la fecha hora del servidor.
+    // tomar todos los turnos mayores que la fecha del servidor.
     try {
         res.json({
             ok: true,
@@ -22,31 +36,51 @@ const listar = async(req, res = response) => {
 
 const crear = async(req, res = response) => {
     const usuarioCalendario = new UsuarioCalendario(req.body);
+    console.log('usuario: ', usuarioCalendario.usuario);
+    console.log('calendario: ', usuarioCalendario.calendario);
     try {
-        const usuarioCalendarioDB = await usuarioCalendario.save();
+        const calendario = await Calendario.findById(usuarioCalendario.calendario);
+        if (calendario.cantidad <= 0 ) {
+            res.status(400).json({
+                ok: false,
+                msg: 'Ya no existe el turno seleccionado.'
+            });
+            return;
+        }
+
+        //const usuarioCalendarioExist = await UsuarioCalendario.find({ usuario: usuarioCalendario.usuario, calendario: usuarioCalendario.calendario });
+        const exists = await UsuarioCalendario.exists({ usuario: usuarioCalendario.usuario, calendario: usuarioCalendario.calendario });
+        console.log('EXISTE', exists);
+        if (exists) {
+            res.status(400).json({
+                ok: false,
+                msg: 'Ya tiene el turno seleccionado.'
+            });
+            return;
+        }
+
+        // Primero validar que aún exista, si existe se valida que no tenga el mismo turno ya asignado.
 
         // Validar que no este tomando el mismo turno dos veces.
 
-
-
-
+        const usuarioCalendarioDB = await usuarioCalendario.save();
         // Resta a la cantidad 1.
-        const calendario = await Calendario.findById(usuarioCalendarioDB.calendario);
+        // const calendario = await Calendario.findById(usuarioCalendarioDB.calendario);
         console.log(calendario);
         const update = {
             cantidad: (calendario.cantidad - 1)
         }
-        const usuarioCalendarioActualizado = await Calendario.findByIdAndUpdate(calendario.id, update, { new: true });
-        console.log(usuarioCalendarioActualizado);
+        const calendarioActualizado = await Calendario.findByIdAndUpdate(calendario.id, update, { new: true });
+        console.log(calendarioActualizado);
         res.json({
             ok: true,
-            usuarioCalendario: usuarioCalendarioActualizado
+            usuarioCalendario: usuarioCalendarioDB
         });
     } catch (error) {
         res.status(500).json({
             ok: false,
             msg: 'Hable con el administrador.'
-        })
+        });
     }
 
 }

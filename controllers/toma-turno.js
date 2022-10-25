@@ -3,58 +3,123 @@ const Calendario = require('../models/calendario');
 const Planilla = require('../models/planilla');
 const TomaTurno = require('../models/toma-turno');
 
-const listar = async(req, res = response) => {
-    // buscar la planilla activa.
-    // luego con ese ID buscar los calendarios
-    const planilla = await Planilla.find({ estado: true }).limit(1);
-    console.log("planilla", planilla);
-    console.log("ID", planilla[0]._id);
-    const calendario = await Calendario.find({ planillaId: planilla[0]._id });
-    console.log("calendario", calendario);
+const obtenerPlanillaActiva = async (req, res = response) => {
     try {
+        const planilla = await Planilla.find({ estado: true }).sort({ fechaHoraInicio : -1 }).limit(1);
         res.json({
             ok: true,
             planilla: planilla[0],
-            calendario
         });
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Error al listar planillas turnos. Hable con el administrador.'
+            msg: 'Error al obtener planilla activa. Hable con el administrador.'
+        });
+    }
+}
+const obtenerTomaTurnoActiva = async (req, res = response) => {
+    try {
+        const tomaTurno = await TomaTurno.find({ estado: true }).sort({ fechaHoraInicio : -1 }).limit(1);
+        res.json({
+            ok: true,
+            tomaTurno: tomaTurno[0],
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al obtener toma de turno activa. Hable con el administrador.'
         });
     }
 }
 
+const listar = async (req, res = response) => {
+    // buscar la planilla activa.
+    // luego con ese ID buscar los calendarios
+    //const planilla = await Planilla.find({ estado: true }).sort({ fechaHoraInicio : -1 }).limit(1);
+    //const calendario = await Calendario.find({ planillaId: planilla[0]._id });
 
-// crea data en la tabla toma-turno.
-const activar = async(req, res = response) => {
-    const planilla = await Planilla.find({ estado: true }).limit(1);
-    const calendarios = await Calendario.find({ planillaId: planilla[0]._id });
-
-    // GRABAR EN LA TABLA TOMA-TURNO.
-
-    const tomaTurno = new TomaTurno({
-        fechaInicio: new Date(),
-        fechaTermino: new Date(),
-        calendario: calendario,
-        planilla: planilla
-    });
-
-    // RESPONDE DATA DESDE TABLA TOMA-TURNO para poder eliminar a gusto.
     try {
+        const tomaTurno = await TomaTurno.find({ estado: true }).sort({ fechaHoraInicio : -1 }).limit(1);
+        if (tomaTurno.length <= 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Toma de turno Desactivada.'
+            });
+        }
+        const planilla = await Planilla.findById(tomaTurno[0].planilla);
+        const calendario = await Calendario.find({ planillaId: planilla._id });
         res.json({
             ok: true,
-            planilla: planilla[0],
+            planilla,
             calendario
         });
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Error al listar planillas turnos. Hable con el administrador.'
+            msg: 'Error al listar planillas para la toma de turnos. Hable con el administrador.'
+        });
+    }
+}
+
+// crea data en la tabla toma-turno.
+const activar = async (req, res = response) => {
+    try {
+        const id = req.uid;
+        // no es necesario enviar la planilla.
+        // const { planilla: planillaId } = req.body;
+        const planillaActiva = await Planilla.find({ estado: true }).sort({ fechaHoraInicio : -1 }).limit(1);
+        const tomaTurno = new TomaTurno({
+            planilla: planillaActiva[0].id,
+            usuarioInicio: id
+        });
+        const tomaTurnoDB = await tomaTurno.save();
+        res.json({
+            ok: true,
+            tomaTurno: tomaTurnoDB
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al activar la toma de turno. Hable con el administrador.'
+        });
+    }
+}
+
+const desactivar = async (req, res = response) => {
+    try {
+        const uid = req.uid;
+        const planillaId = req.params.id;
+        const tomaTurnoFind = await TomaTurno.find({planilla: planillaId});
+        if (!tomaTurnoFind) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Toma de turnos no existe.'
+            });
+        }
+        //----------------------------------------- 
+        const cambiosTomaTurno = {
+            estado: false,
+            fechaHoraTermino: Date.now(),
+            usuarioTermino: uid
+        }
+
+        const tomaTurnoActualizada = await TomaTurno.findByIdAndUpdate(tomaTurnoFind[0].id, cambiosTomaTurno, { new: true })
+        res.json({
+            ok: true,
+            tomaTurno: tomaTurnoActualizada
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al activar la toma de turno. Hable con el administrador.'
         });
     }
 }
 
 module.exports = {
-    listar
+    listar,
+    activar,
+    desactivar,
+    obtenerPlanillaActiva,
+    obtenerTomaTurnoActiva
 }
