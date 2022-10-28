@@ -3,6 +3,23 @@ const Calendario = require('../models/calendario');
 const Planilla = require('../models/planilla');
 const TomaTurno = require('../models/toma-turno');
 
+const listarXXX = async(req, res = response) => {
+    try {
+        const faltas = await Falta.find();
+        res.json({
+            ok: true,
+            faltas
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Ocurrio un problema al listar faltas. Hable con el administrador.'
+        })
+    }
+
+}
+
 const obtenerPlanillaActiva = async (req, res = response) => {
     try {
         const planilla = await Planilla.find({ estado: true }).sort({ fechaHoraInicio : -1 }).limit(1);

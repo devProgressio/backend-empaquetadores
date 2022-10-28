@@ -10,15 +10,15 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const {
-    getPlanillas,
-    crearPlanilla,
-    actualizarPlanilla,
-    eliminarPlanilla
+    listar,
+    crear,
+    actualizar,
+    eliminar
 } = require('../controllers/planillas');
 
 const router = Router();
 
-router.get('/', validarJWT, getPlanillas);
+router.get('/', validarJWT, listar);
 
 router.post('/', [
         validarJWT,
@@ -28,7 +28,7 @@ router.post('/', [
         check('fechaHoraTermino', 'La fecha Término de la planilla es necesaria.').not().isEmpty(),
         validarCampos
     ],
-    crearPlanilla
+    crear
 );
 
 router.put('/:id', [
@@ -39,10 +39,10 @@ router.put('/:id', [
         check('fechaHoraTermino', 'La fecha Término de la planilla es necesaria.').not().isEmpty(),
         validarCampos
     ],
-    actualizarPlanilla);
+    actualizar);
 
 router.delete('/:id', [
     validarJWT
-], eliminarPlanilla);
+], eliminar);
 
 module.exports = router;

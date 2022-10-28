@@ -1,7 +1,7 @@
 const { response } = require("express");
 const Planilla = require('../models/planilla');
 
-const getPlanillas = async(req, res = response) => {
+const listar = async(req, res = response) => {
 
     const planillas = await Planilla.find();
 
@@ -14,13 +14,13 @@ const getPlanillas = async(req, res = response) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Ocurrio un problema al listar planillas. Hable con el administrador.'
+            msg: 'Ocurrió un problema al listar planillas. Hable con el administrador.'
         })
     }
 
 }
 
-const crearPlanilla = async(req, res = response) => {
+const crear = async(req, res = response) => {
 
     const planilla = new Planilla(req.body);
 
@@ -42,7 +42,7 @@ const crearPlanilla = async(req, res = response) => {
 
 }
 
-const actualizarPlanilla = async(req, res = response) => {
+const actualizar = async(req, res = response) => {
 
     const id = req.params.id;
     console.log(id);
@@ -79,7 +79,7 @@ const actualizarPlanilla = async(req, res = response) => {
 
 }
 
-const eliminarPlanilla = async(req, res = response) => {
+const eliminar= async(req, res = response) => {
 
     const id = req.params.id;
 
@@ -113,8 +113,8 @@ const eliminarPlanilla = async(req, res = response) => {
 }
 
 module.exports = {
-    getPlanillas,
-    crearPlanilla,
-    actualizarPlanilla,
-    eliminarPlanilla
+    listar,
+    crear,
+    actualizar,
+    eliminar
 }

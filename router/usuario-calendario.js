@@ -10,7 +10,8 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const {
-    listar,
+    listarPorPlanilla,
+    listarPorUsuario,
     crear,
     actualizar,
     eliminar
@@ -18,7 +19,9 @@ const {
 
 const router = Router();
 
-router.get('/:usuarioId', validarJWT, listar);
+router.get('/planilla/:planillaId', validarJWT, listarPorPlanilla);
+
+router.get('/:usuarioId', validarJWT, listarPorUsuario);
 
 router.post('/', [
         validarJWT,

@@ -2,11 +2,51 @@ const { response } = require("express");
 const UsuarioCalendario = require('../models/usuario-calendario');
 const Calendario = require('../models/calendario');
 
-const listar = async(req, res = response) => {
+//TODO: listar todos los turnos de los usuarios que tomaron en cierta planilla.
+// planilla ---> calendarios 
+// esto es para hacer el pdf.
+const listarPorPlanilla= async(req, res = response) => {
+    try {
+        const planillaId = req.params.planillaId;
+        const allUsuarioCalendario = await UsuarioCalendario.find( {} )
+        .populate('usuario', 'nombre')
+        .populate({
+            path: 'calendario',
+            populate: {
+                path: 'calendario',
+                select: 'fechaHoraInicio fechaHoraTermino planillaId'
+              },
+            options: { sort: { 'fechaHoraInicio': -1 } }
+          });
+          console.log(allUsuarioCalendario);
+
+          const usuarioCalendario = allUsuarioCalendario.filter(uc => uc.calendario.planillaId == planillaId);
+          console.log(usuarioCalendario);
+        
+/*         const usuarioCalendario = await UsuarioCalendario.find({})
+        .populate('usuario', 'nombre')
+        .populate({
+            path: 'calendario',
+            match: { planillaId: { $eq: planillaId } },
+            select: 'fechaHoraInicio fechaHoraTermino'
+          }); */
+
+        res.json({
+            ok: true,
+            usuarioCalendario
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al listar turnos por planilla. Hable con el administrador.'
+        });
+    }
+}
+
+const listarPorUsuario = async(req, res = response) => {
     const id = req.params.usuarioId;
     //, calendario:  {$gt: new Date()}
 
-    const fechaHoraServidor = new Date();
     const usuarioCalendario = await UsuarioCalendario.find({ usuario: id })
     .populate('usuario', 'nombre')
         .populate({
@@ -121,7 +161,8 @@ const eliminar= async(req, res = response) => {
 }
 
 module.exports = {
-    listar,
+    listarPorPlanilla,
+    listarPorUsuario,
     crear,
     actualizar,
     eliminar
