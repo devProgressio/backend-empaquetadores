@@ -16,20 +16,16 @@ const listarPorPlanilla= async(req, res = response) => {
                 path: 'calendario',
                 select: 'fechaHoraInicio fechaHoraTermino planillaId'
               },
-            options: { sort: { 'fechaHoraInicio': -1 } }
+            options: { sort: { 'calendario.fechaHoraInicio': -1 } }
           });
           console.log(allUsuarioCalendario);
 
           const usuarioCalendario = allUsuarioCalendario.filter(uc => uc.calendario.planillaId == planillaId);
-          console.log(usuarioCalendario);
-        
-/*         const usuarioCalendario = await UsuarioCalendario.find({})
-        .populate('usuario', 'nombre')
-        .populate({
-            path: 'calendario',
-            match: { planillaId: { $eq: planillaId } },
-            select: 'fechaHoraInicio fechaHoraTermino'
-          }); */
+
+          usuarioCalendario.sort(
+            (objA, objB) => Number(objA.calendario.fechaHoraInicio) - Number(objB.calendario.fechaHoraInicio),
+          );
+          // console.log(usuarioCalendario);
 
         res.json({
             ok: true,
