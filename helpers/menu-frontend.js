@@ -2,7 +2,7 @@ const { ROLES } = require("../emun/roles");
 
 const getMenuFrontEnd = (role = ROLES.USUARIO) => {
 
-    const menu = [{
+    const menu = [/* {
             titulo: 'Dashboard',
             icono: 'mdi mdi-gauge',
             submenu: [
@@ -11,7 +11,7 @@ const getMenuFrontEnd = (role = ROLES.USUARIO) => {
                 { titulo: 'Promesas', url: 'promesas' },
                 { titulo: 'Rxjs', url: 'rxjs' },
             ],
-        },
+        }, */
         {
             titulo: 'Mantenedores',
             icono: 'mdi mdi-folder-lock-open',
@@ -38,24 +38,24 @@ const getMenuFrontEnd = (role = ROLES.USUARIO) => {
 
 
     if (role === ROLES.ADMINISTRADOR) {
-        menu[1].submenu.unshift({ titulo: 'Usuarios', url: 'usuarios' });
-        menu[1].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
-        menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
-        menu[1].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
-        menu[2].submenu.unshift({ titulo: 'TT realizadas', url: 'toma-turno-realizada' });
-        menu[2].submenu.unshift({ titulo: 'Turnos por Planilla', url: 'turno-planilla' });
+        menu[0].submenu.unshift({ titulo: 'Usuarios', url: 'usuarios' });
+        menu[0].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
+        menu[0].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
+        menu[0].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
+        menu[1].submenu.unshift({ titulo: 'TT realizadas', url: 'toma-turno-realizada' });
+        menu[1].submenu.unshift({ titulo: 'Turnos por Planilla', url: 'turno-planilla' });
     }
 
     if (role === ROLES.FALTA) {
-        menu[1].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
-        menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
+        menu[0].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
+        menu[0].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
     }
 
     if (role === ROLES.TURNO) {
-        menu[1].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
-        menu[1].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
-        menu[2].submenu.unshift({ titulo: 'Tomas de turnos', url: 'toma-turno-realizada' });
-        menu[2].submenu.unshift({ titulo: 'Turnos por Planilla', url: 'turno-planilla' });
+        menu[0].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
+        menu[0].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
+        menu[1].submenu.unshift({ titulo: 'Tomas de turnos', url: 'toma-turno-realizada' });
+        menu[1].submenu.unshift({ titulo: 'Turnos por Planilla', url: 'turno-planilla' });
     }
 
     return menu;

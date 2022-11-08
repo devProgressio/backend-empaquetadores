@@ -14,7 +14,7 @@ const listarPorPlanilla= async(req, res = response) => {
             path: 'calendario',
             populate: {
                 path: 'calendario',
-                select: 'fechaHoraInicio fechaHoraTermino planillaId'
+                select: 'fechaHoraInicio fechaHoraTermino planillaId.nombre'
               },
             options: { sort: { 'calendario.fechaHoraInicio': -1 } }
           });

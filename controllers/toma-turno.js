@@ -3,18 +3,21 @@ const Calendario = require('../models/calendario');
 const Planilla = require('../models/planilla');
 const TomaTurno = require('../models/toma-turno');
 
-const listarXXX = async(req, res = response) => {
+const listarTodo = async(req, res = response) => {
     try {
-        const faltas = await Falta.find();
+        const tomaTurno = await TomaTurno.find()
+        .populate('planilla', 'nombre')
+        .populate('usuarioInicio', 'nombre')
+        .populate('usuarioTermino', 'nombre');
         res.json({
             ok: true,
-            faltas
+            tomaTurno
         });
 
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Ocurrio un problema al listar faltas. Hable con el administrador.'
+            msg: 'Ocurrió un problema al listar faltas. Hable con el administrador.'
         })
     }
 
@@ -64,7 +67,7 @@ const listar = async (req, res = response) => {
             });
         }
         const planilla = await Planilla.findById(tomaTurno[0].planilla);
-        const calendario = await Calendario.find({ planillaId: planilla._id });
+        const calendario = await Calendario.find({ planillaId: planilla.id });
         res.json({
             ok: true,
             planilla,
@@ -106,7 +109,7 @@ const desactivar = async (req, res = response) => {
     try {
         const uid = req.uid;
         const planillaId = req.params.id;
-        const tomaTurnoFind = await TomaTurno.find({planilla: planillaId});
+        const tomaTurnoFind = await TomaTurno.find({planilla: planillaId, estado: true});
         if (!tomaTurnoFind) {
             return res.status(404).json({
                 ok: false,
@@ -134,6 +137,7 @@ const desactivar = async (req, res = response) => {
 }
 
 module.exports = {
+    listarTodo,
     listar,
     activar,
     desactivar,

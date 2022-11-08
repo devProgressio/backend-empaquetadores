@@ -11,6 +11,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const {
     listar,
+    listarTodo,
     activar,
     desactivar,
     obtenerPlanillaActiva,
@@ -20,6 +21,8 @@ const {
 const router = Router();
 
 router.get('/', validarJWT, listar);
+
+router.get('/todo', validarJWT, listarTodo);
 
 router.get('/planilla-activa', validarJWT, obtenerPlanillaActiva);
 router.get('/toma-turno-activa', validarJWT, obtenerTomaTurnoActiva);

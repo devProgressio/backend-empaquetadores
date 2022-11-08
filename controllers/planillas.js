@@ -1,11 +1,9 @@
 const { response } = require("express");
 const Planilla = require('../models/planilla');
 
-const listar = async(req, res = response) => {
-
-    const planillas = await Planilla.find();
-
+const listar = async (req, res = response) => {
     try {
+        const planillas = await Planilla.find();
         res.json({
             ok: true,
             planillas
@@ -17,17 +15,12 @@ const listar = async(req, res = response) => {
             msg: 'Ocurrió un problema al listar planillas. Hable con el administrador.'
         })
     }
-
 }
 
-const crear = async(req, res = response) => {
-
-    const planilla = new Planilla(req.body);
-
+const crear = async (req, res = response) => {
     try {
-
+        const planilla = new Planilla(req.body);
         const planillaDB = await planilla.save();
-
         res.json({
             ok: true,
             msg: planillaDB
@@ -39,18 +32,12 @@ const crear = async(req, res = response) => {
             msg: 'Hable con el administrador.'
         })
     }
-
 }
 
-const actualizar = async(req, res = response) => {
-
-    const id = req.params.id;
-    console.log(id);
-
+const actualizar = async (req, res = response) => {
     try {
-
+        const id = req.params.id;
         const planilla = await Planilla.findById(id);
-        console.log(id);
         if (!planilla) {
             return res.status(404).json({
                 ok: true,
@@ -58,11 +45,23 @@ const actualizar = async(req, res = response) => {
             });
         }
 
+        // verificar que haya solo una planilla activa.
+        // si es que va a activar una
+        const existeActiva = await Planilla.find({estado: true});
+
+        if (existeActiva.length > 0 && req.body.estado) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Ya existe una planilla activa'
+            });
+        }
+
         const cambiosPlanilla = {
             ...req.body
         }
 
-        const planillaActualizada = await Planilla.findByIdAndUpdate(id, cambiosPlanilla, { new: true })
+        const planillaActualizada = await Planilla.findByIdAndUpdate(id, cambiosPlanilla, { new: true });
+
 
         res.json({
             ok: true,
@@ -76,10 +75,9 @@ const actualizar = async(req, res = response) => {
             msg: 'Error al actualizar planilla, hable con el administrador.'
         })
     }
-
 }
 
-const eliminar= async(req, res = response) => {
+const eliminar = async (req, res = response) => {
 
     const id = req.params.id;
 
