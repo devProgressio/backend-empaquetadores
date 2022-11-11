@@ -54,7 +54,7 @@ const actualizarTipoFalta = async(req, res = response) => {
         console.log(id);
         if (!tipoFalta) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Tipo falta no encontrada por id'
             });
         }
@@ -90,7 +90,7 @@ const eliminarTipoFalta = async(req, res = response) => {
 
         if (!tipoFalta) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Tipo falta no encontrada por id.'
             });
         }

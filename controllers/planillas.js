@@ -40,7 +40,7 @@ const actualizar = async (req, res = response) => {
         const planilla = await Planilla.findById(id);
         if (!planilla) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Planilla no encontrada por id'
             });
         }
@@ -51,7 +51,7 @@ const actualizar = async (req, res = response) => {
 
         if (existeActiva.length > 0 && req.body.estado) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Ya existe una planilla activa'
             });
         }
@@ -87,7 +87,7 @@ const eliminar = async (req, res = response) => {
 
         if (!planilla) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Planilla no encontrada por id.'
             });
         }

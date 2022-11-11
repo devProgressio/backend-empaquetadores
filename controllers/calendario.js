@@ -64,7 +64,7 @@ const eliminar= async(req, res = response) => {
         const calendario = await Calendario.findById(id);
         if (!calendario) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'No se encontró el turno.'
             });
         }

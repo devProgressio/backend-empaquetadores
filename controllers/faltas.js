@@ -77,7 +77,7 @@ const actualizar = async(req, res = response) => {
 
         if (!falta) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Falta no encontrada por id.'
             });
         }
@@ -113,7 +113,7 @@ const eliminar = async(req, res = response) => {
 
         if (!falta) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Falta no encontrada por id.'
             });
         }

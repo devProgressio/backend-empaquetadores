@@ -5,27 +5,28 @@ const Calendario = require('../models/calendario');
 //TODO: listar todos los turnos de los usuarios que tomaron en cierta planilla.
 // planilla ---> calendarios 
 // esto es para hacer el pdf.
-const listarPorPlanilla= async(req, res = response) => {
+const listarPorPlanilla = async (req, res = response) => {
     try {
-        const planillaId = req.params.planillaId;
-        const allUsuarioCalendario = await UsuarioCalendario.find( {} )
-        .populate('usuario', 'nombre')
-        .populate({
-            path: 'calendario',
-            populate: {
+        const planillaId = req.
+            params.planillaId;
+        const allUsuarioCalendario = await UsuarioCalendario.find({})
+            .populate('usuario', 'nombre')
+            .populate({
                 path: 'calendario',
-                select: 'fechaHoraInicio fechaHoraTermino planillaId.nombre'
-              },
-            options: { sort: { 'calendario.fechaHoraInicio': -1 } }
-          });
-          console.log(allUsuarioCalendario);
+                populate: {
+                    path: 'calendario',
+                    select: 'fechaHoraInicio fechaHoraTermino planillaId.nombre'
+                },
+                options: { sort: { 'calendario.fechaHoraInicio': -1 } }
+            });
+        console.log(allUsuarioCalendario);
 
-          const usuarioCalendario = allUsuarioCalendario.filter(uc => uc.calendario.planillaId == planillaId);
+        const usuarioCalendario = allUsuarioCalendario.filter(uc => uc.calendario.planillaId == planillaId);
 
-          usuarioCalendario.sort(
+        usuarioCalendario.sort(
             (objA, objB) => Number(objA.calendario.fechaHoraInicio) - Number(objB.calendario.fechaHoraInicio),
-          );
-          // console.log(usuarioCalendario);
+        );
+        // console.log(usuarioCalendario);
 
         res.json({
             ok: true,
@@ -39,21 +40,23 @@ const listarPorPlanilla= async(req, res = response) => {
     }
 }
 
-const listarPorUsuario = async(req, res = response) => {
+const listarPorUsuario = async (req, res = response) => {
     const id = req.params.usuarioId;
     //, calendario:  {$gt: new Date()}
 
     const usuarioCalendario = await UsuarioCalendario.find({ usuario: id })
-    .populate('usuario', 'nombre')
+        .populate('usuario', 'nombre')
         .populate({
             path: 'calendario',
             populate: {
                 path: 'calendario',
                 select: 'fechaHoraInicio fechaHoraTermino'
-              },
-            options: { sort: { 'fechaHoraInicio': -1 } }
-          });
-    
+            }
+        });
+
+    usuarioCalendario.sort(
+        (objA, objB) => Number(objB.calendario.fechaHoraInicio) - Number(objA.calendario.fechaHoraInicio),
+    );
 
     // los que aún no pasan de la fecha hora del servidor.
     // tomar todos los turnos mayores que la fecha del servidor.
@@ -70,13 +73,13 @@ const listarPorUsuario = async(req, res = response) => {
     }
 }
 
-const crear = async(req, res = response) => {
+const crear = async (req, res = response) => {
     const usuarioCalendario = new UsuarioCalendario(req.body);
     console.log('usuario: ', usuarioCalendario.usuario);
     console.log('calendario: ', usuarioCalendario.calendario);
     try {
         const calendario = await Calendario.findById(usuarioCalendario.calendario);
-        if (calendario.cantidad <= 0 ) {
+        if (calendario.cantidad <= 0) {
             res.status(400).json({
                 ok: false,
                 msg: 'Ya no existe el turno seleccionado.'
@@ -130,13 +133,13 @@ const actualizar = (req, res = response) => {
 
 }
 
-const eliminar= async(req, res = response) => {
+const eliminar = async (req, res = response) => {
     const id = req.params.id;
     try {
         const usuarioCalendario = await UsuarioCalendario.findById(id);
         if (!usuarioCalendario) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'No se encontró el turno.'
             });
         }

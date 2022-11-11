@@ -10,15 +10,15 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const {
-    getNoticias,
-    crearNoticia,
-    actualizarNoticia,
-    eliminarNoticia
+    listar,
+    crear,
+    actualizar,
+    eliminar
 } = require('../controllers/noticias');
 
 const router = Router();
 
-router.get('/', validarJWT, getNoticias);
+router.get('/', validarJWT, listar);
 
 router.post('/', [
         validarJWT,
@@ -28,7 +28,7 @@ router.post('/', [
         check('usuario', 'Falta el identificador del usuario.').isMongoId(),
         validarCampos
     ],
-    crearNoticia
+    crear
 );
 
 router.put('/:id', [
@@ -36,11 +36,11 @@ router.put('/:id', [
         check('nombre', 'El nombre es obligatorio').not().isEmpty(),
         validarCampos
     ],
-    actualizarNoticia);
+    actualizar);
 
 router.delete('/:id', [
     validarJWT,
-    eliminarNoticia
+    eliminar
 ]);
 
 module.exports = router;

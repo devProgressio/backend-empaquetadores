@@ -7,7 +7,7 @@ const listar = async (req, res = response) => {
         .populate('usuario', 'nombre')
         .populate('falta', 'nombre gravedad')
         .populate('supervisor', 'nombre')
-        .sort('fechaCreacion');
+        .sort({'fechaCreacion': -1});
     try {
         res.json({
             ok: true,
@@ -51,7 +51,7 @@ const actualizar = async (req, res = response) => {
 
         if (!falta) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Falta no encontrada por ID.'
             });
         }
@@ -87,7 +87,7 @@ const eliminar = async (req, res = response) => {
 
         if (!falta) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Falta no encontrada por id.'
             });
         }

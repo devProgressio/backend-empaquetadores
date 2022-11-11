@@ -2,30 +2,6 @@ const { Schema, model } = require('mongoose');
 
 const FaltaSchema = Schema({
 
-    /*     tipoFaltaId: {
-            type: String,
-            required: true
-        }, */
-    // quien recibe la falta.
-    /*     usuarioId: {
-            type: String,
-            required: true,
-            unique: true
-        }, */
-    // quien asigna la falta.
-    /*     supervisorId: {
-            type: String,
-            required: true
-        }, */
-    // en que turno ocurrió la falta.
-    /*     turnoId: {
-            type: String,
-            required: true
-        }, */
-    /*     fecha: {
-            type: String,
-            required: true
-        } */
     nombre: {
         type: String,
         required: true,
@@ -40,7 +16,6 @@ const FaltaSchema = Schema({
         maxLength: 250,
         trim: true
     },
-
     gravedad: {
         type: String,
         required: true,

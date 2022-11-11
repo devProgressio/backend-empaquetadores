@@ -19,8 +19,10 @@ const NoticiaSchema = Schema({
         type: String
     },
     importancia: {
-        type: Number,
-        default: 0
+        type: String,
+        required: true,
+        enum: ['BAJA', 'MEDIA', 'ALTA'],
+        default: 'BAJA'
     },
     usuario: {
         type: Schema.Types.ObjectId,

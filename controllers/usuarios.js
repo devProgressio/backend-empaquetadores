@@ -44,7 +44,7 @@ const listar = async(req, res = response) => {
 
 } */
 
-const crearUsuario = async(req, res = response) => {
+const crear = async(req, res = response) => {
     try {
         const { email, password } = req.body;
         const existeEmail = await Usuario.findOne({ email });
@@ -85,7 +85,7 @@ const crearUsuario = async(req, res = response) => {
     }
 }
 
-const actualizarUsuarios = async(req, res = response) => {
+const actualizar = async(req, res = response) => {
 
     //TODO: Validar token y comprobar si es el usuario correcto
     try {
@@ -131,7 +131,45 @@ const actualizarUsuarios = async(req, res = response) => {
     }
 };
 
-const eliminarUsuario = async(req, res = response) => {
+const actualizarPerfil = async(req, res = response) => {
+    try {
+        const id = req.params.id;
+        const usuarioDB = await Usuario.findById(id);
+        if (!usuarioDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un usuario por ese id'
+            });
+        }
+        const { email, ...campos } = req.body;
+
+        if (usuarioDB.email !== email) {
+            const existeEmail = await Usuario.findOne({ email });
+            
+            if (existeEmail && existeEmail.uid == id) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ya existe un usuario con ese email'
+                });
+            }
+        }
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(id, campos, { new: true });
+
+        res.json({
+            ok: true,
+            usuario: usuarioActualizado
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado al actualizar usuario'
+        })
+    }
+};
+
+const eliminar = async(req, res = response) => {
     try {
         const uid = req.params.id;
         console.log('eliminarUsuario', uid);
@@ -196,8 +234,9 @@ const actualizarPassword = async(req, res = response) => {
 
 module.exports = {
     listar,
-    crearUsuario,
-    actualizarUsuarios,
-    eliminarUsuario,
+    crear,
+    actualizar,
+    actualizarPerfil,
+    eliminar,
     actualizarPassword
 }

@@ -1,7 +1,7 @@
 const { response } = require("express")
 const Noticia = require("../models/noticia");
 
-const getNoticias = async(req, res = response) => {
+const listar = async(req, res = response) => {
 
     const noticias = await Noticia.find()
         .populate('usuario', 'nombre');
@@ -24,27 +24,23 @@ const getNoticias = async(req, res = response) => {
 
 }
 
-const crearNoticia = async(req, res = response) => {
-
-    const noticia = new Noticia(req.body);
+const crear = async(req, res = response) => {
     try {
+        const noticia = new Noticia(req.body);
         const noticiaDB = await noticia.save();
-
         res.json({
             ok: true,
             msg: noticiaDB
         })
-
     } catch (error) {
         res.status(500).json({
             ok: false,
             msg: 'Error al crear noticia, hable con el administrador.'
         })
     }
-
 }
 
-const actualizarNoticia = async(req, res = response) => {
+const actualizar = async(req, res = response) => {
 
     // const noticia = new Noticia(req.body);
     const id = req.params.id;
@@ -84,7 +80,7 @@ const actualizarNoticia = async(req, res = response) => {
 
 }
 
-const eliminarNoticia = async(req, res = response) => {
+const eliminar = async(req, res = response) => {
 
     const id = req.params.id;
 
@@ -94,7 +90,7 @@ const eliminarNoticia = async(req, res = response) => {
 
         if (!noticia) {
             return res.status(404).json({
-                ok: true,
+                ok: false,
                 msg: 'Noticia no encontrada por id.'
             });
         }
@@ -118,8 +114,8 @@ const eliminarNoticia = async(req, res = response) => {
 }
 
 module.exports = {
-    getNoticias,
-    crearNoticia,
-    actualizarNoticia,
-    eliminarNoticia
+    listar,
+    crear,
+    actualizar,
+    eliminar
 }
