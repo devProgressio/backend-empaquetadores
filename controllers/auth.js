@@ -40,7 +40,7 @@ const login = async(req, res = response) => {
         res.status(500).json({
             ok: false,
             msg: 'Hable con el administrador'
-        })
+        });
     }
 }
 

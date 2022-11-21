@@ -21,25 +21,24 @@ const getMenuFrontEnd = (role = ROLES.USUARIO) => {
             titulo: 'Administración',
             icono: 'mdi mdi-clipboard-alert',
             submenu: [
-                { titulo: 'Faltas asignadas', url: 'falta-asignada' },
-                { titulo: 'Turnos asignados', url: 'turno-asignado' },
-                { titulo: 'Toma de turnos', url: 'toma-turno' }
             ],
         },
         {
-            titulo: 'Información',
-            icono: 'mdi mdi-information-outline',
+            titulo: 'Común',
+            icono: 'mdi mdi-clipboard-alert',
             submenu: [
-                { titulo: 'Noticias', url: 'visor-noticias' },
+                { titulo: 'Faltas asignadas', url: 'falta-asignada' },
+                { titulo: 'Turnos asignados', url: 'turno-asignado' },
+                { titulo: 'Toma de turnos', url: 'toma-turno' },
+                { titulo: 'Noticias', url: 'visor-noticias' }
             ],
-
-        },
+        }
     ];
 
 
     if (role === ROLES.ADMINISTRADOR) {
         menu[0].submenu.unshift({ titulo: 'Usuarios', url: 'usuarios' });
-        menu[0].submenu.unshift({ titulo: 'Faltas', url: 'faltas' });
+        menu[0].submenu.unshift({ titulo: 'Tipos de Faltas', url: 'faltas' });
         menu[0].submenu.unshift({ titulo: 'Noticias', url: 'noticias' });
         menu[0].submenu.unshift({ titulo: 'Planillas', url: 'planillas' });
         menu[1].submenu.unshift({ titulo: 'TT realizadas', url: 'toma-turno-realizada' });

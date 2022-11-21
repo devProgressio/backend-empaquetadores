@@ -4,7 +4,8 @@ const NoticiaSchema = Schema({
 
     nombre: {
         type: String,
-        required: true
+        required: true,
+        max
     },
     glosa: {
         type: String,
