@@ -4,7 +4,8 @@ const TipoFaltaSchema = Schema({
 
     nombre: {
         type: String,
-        required: true
+        required: true,
+        maxLength: 100
     },
     glosa: {
         type: String,

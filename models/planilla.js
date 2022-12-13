@@ -3,11 +3,13 @@ const { Schema, model } = require('mongoose');
 const PlanillaSchema = Schema({
     nombre: {
         type: String,
-        required: true
+        required: true,
+        maxLength: 100
     },
     glosa: {
         type: String,
-        required: false
+        required: false,
+        maxLength: 200,
     },
     // estado activa.
     estado: {
